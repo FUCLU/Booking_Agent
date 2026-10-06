@@ -1,0 +1,58 @@
+# config.yaml - Cấu hình tập trung cho Agent_LangChain
+# Nhà cung cấp LLM
+llm:
+  provider: "openai"                  
+  model: "openai/gpt-4o-mini"               
+  temperature: 0                      
+  max_tokens: 4096                    
+  top_p: 1.0                         
+  timeout: 60                        
+
+  base_url: "https://openrouter.ai/api/v1"                       
+  api_version: ""                     
+  api_key_env: "OPENROUTER_API_KEY"
+
+  # Tuỳ chọn nâng cao
+  extra_headers: {}                   # header bổ sung (vd OpenRouter cần HTTP-Referer)
+  # Ví dụ OpenRouter:
+  # extra_headers:
+  #   HTTP-Referer: "https://myapp.com"
+  #   X-Title: "Agent_LangChain"
+
+# Ngày hệ thống (cố định để kết quả tái lập được khi test)
+system:
+  today: "2026-10-06"
+
+# Harness
+harness:
+  price_cap: 5000000                  # VND - vượt mức này cần nhân viên duyệt
+  max_tool_calls: 14                  # ngân sách số lần gọi tool / 1 tác vụ
+
+# Agent (tên đặt theo tên file)
+agent:
+  react_agent:
+    max_not_done: 3                   # số lần được phép báo "xong" sai trước khi bỏ cuộc
+    allowed_tools:                    # tool mà agent này được bind cho model
+      - search_flights
+      - book_flight
+      - cancel_booking
+      - finish                        # ReAct cần finish + handoff vì model tự quyết kết thúc
+      - handoff_to_human
+
+  plan_execute_agent:
+    allowed_tools:                    # plan/execute chỉ dùng tool nghiệp vụ (handoff do plan step xử lý)
+      - search_flights
+      - book_flight
+      - cancel_booking
+
+  hybrid_agent:
+    max_replans: 2                    # số lần lập lại kế hoạch
+    max_retries: 2                    # số lần thử lại 1 bước khi lỗi tạm thời
+    retryable_codes:                  # mã lỗi có thể thử lại
+      - "BAD_ARGS"
+      - "UNKNOWN_FLIGHT"
+      - "TIMEOUT"
+    allowed_tools:                    # giống plan_execute, handoff do plan step xử lý
+      - search_flights
+      - book_flight
+      - cancel_booking
