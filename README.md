@@ -1,4 +1,4 @@
-# Hướng dẫn chạy và báo cáo Agent đặt vé máy bay
+# Hướng dẫn chạy và báo cáo Dựng Agent đặt vé máy bay bằng LangChain 
 
 > Bài tập: tạo công cụ giả lập, cài đặt harness 4 lớp bảo vệ, triển khai ba mẫu ReAct, Plan-then-Execute, Lai và so sánh hiệu quả thông qua 9 kịch bản.
 
